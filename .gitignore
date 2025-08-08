@@ -135,6 +135,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+env
 .env
 .envrc
 .venv
@@ -170,7 +171,7 @@ dmypy.json
 cython_debug/
 
 #
-parse-any-doc/
+# parse-any-doc/
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
