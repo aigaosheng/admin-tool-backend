@@ -1,0 +1,60 @@
+# ========================
+# Stage 1: Build stage
+# ========================
+FROM python:3.11-slim AS builder
+
+WORKDIR /app
+
+# Install only what's needed to build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install
+COPY requirements.txt .
+COPY constraints.txt .
+# Install your local package
+COPY ./parse-any-doc ./parse-any-doc
+
+# Install Python dependencies into a separate folder
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt \
+    && pip install --no-cache-dir --prefix=/install paddlepaddle==3.1.0 --no-deps -i https://www.paddlepaddle.org.cn/packages/stable/cpu/ \
+    && RUN pip install --no-cache-dir --prefix=/install ./parse-any-doc \
+     && pip uninstall -y torch torchvision torchaudio 
+
+# ========================
+# Stage 2: Runtime stage
+# ========================
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install only runtime system libs (no gcc)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Python deps from builder
+COPY --from=builder /install /usr/local
+
+# Copy application code
+COPY . .
+
+# Create temp directory
+RUN mkdir -p /app/temp
+
+# Expose port
+EXPOSE 8000
+
+# Production run (no reload)
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

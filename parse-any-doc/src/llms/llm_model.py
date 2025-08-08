@@ -22,9 +22,7 @@ from langchain.schema import BaseMessage, HumanMessage, AIMessage
 from langchain_openai import OpenAI
 from langchain_google_genai import GoogleGenerativeAI
 
-# LangSmith imports
-from langsmith import Client as LangSmithClient
-from langsmith.run_helpers import traceable
+# langchain imports
 from langchain.output_parsers import PydanticOutputParser
 
 from audit_logger import logger_audit_handler as logger

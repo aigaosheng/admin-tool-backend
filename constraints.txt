@@ -1,0 +1,21 @@
+# Constraints file to prevent GPU packages and large dependencies
+# torch==2.8.0+cpu
+# torchaudio==2.8.0+cpu
+
+# Block NVIDIA packages
+nvidia-cublas-cu11
+nvidia-cuda-runtime-cu11
+nvidia-cudnn-cu11
+nvidia-cufft-cu11
+nvidia-curand-cu11
+nvidia-cusparse-cu11
+nvidia-cusolver-cu11
+nvidia-ml-py3
+
+# Use CPU-only versions of ML packages
+tensorflow-cpu
+onnxruntime
+
+# Prevent CUDA installations
+cuda
+cuda-toolkit

@@ -457,22 +457,14 @@ async def validate_invoice_data(invoices: List[Dict[str, Any]]):
         logger.error(f"Error validating data: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error validating data: {str(e)}")
 
-SERVERLESS_DEPLOY_AWS = True
-if SERVERLESS_DEPLOY_AWS:
-    from mangum import Mangum
-
-    # existing app = FastAPI(...) stays the same
-
-    handler = Mangum(app)    
-else:
-    if __name__ == "__main__":
-        port = int(os.getenv("PORT", 8000))
-        host = os.getenv("HOST", "0.0.0.0")
-        
-        uvicorn.run(
-            "main:app",
-            host=host,
-            port=port,
-            reload=True,
-            log_level="info"
-        )
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))
+    host = os.getenv("HOST", "0.0.0.0")
+    
+    uvicorn.run(
+        "main:app",
+        host=host,
+        port=port,
+        reload=True,
+        log_level="info"
+    )
