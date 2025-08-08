@@ -73,7 +73,7 @@ COPY --from=builder /install /usr/local
 
 # Copy application code (be selective about what you copy)
 COPY main.py .
-COPY .env .
+# COPY .env .
 # COPY gcloud-gemini-key.json .
 # Add other specific directories you need, avoid copying everything with COPY . .
 
